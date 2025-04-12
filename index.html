@@ -11,12 +11,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0;
             background-color: #36393f;
             color: #ffffff;
             padding: 20px;
             box-sizing: border-box;
+            overflow: hidden;
         }
         #status-container {
             background-color: #2f3136;
@@ -27,6 +28,8 @@
             max-width: calc(300px); /* separator max-width + padding */
             width: 100%;
             box-sizing: border-box;
+            max-height: calc(100vh - 40px);
+            overflow: auto;
         }
         .status-wrapper {
             display: inline-flex;
