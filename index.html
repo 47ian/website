@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Status</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #36393f;
+            color: #ffffff;
+        }
+        #status-container {
+            background-color: #2f3136;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .status-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            background-color: #40444b;
+            padding: 2px 7px;
+            border-radius: 12px;
+            margin: 0;
+            font-size: 0.7em;
+        }
+        #status {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 0;
+        }
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0;
+        }
+        .online { background-color: #43b581; }
+        .idle { background-color: #faa61a; }
+        .dnd { background-color: #f04747; }
+        .offline { background-color: #747f8d; }
+        #spotify-container {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #spotify-art {
+            width: 64px;
+            height: 64px;
+            border-radius: 4px;
+        }
+        .spotify-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        #activities-container {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .activity-card {
+            background-color: #40444b;
+            padding: 8px; /* Reduced from 12px */
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Reduced from 12px */
+            height: 63px; /* Reduced from 88px */
+            width: 300px; /* Fixed width */
+            overflow: hidden;
+            box-sizing: border-box;
+            position: relative; /* Add this for progress bar positioning */
+            border: 1px solid rgba(255, 255, 255, 0.05); /* Add subtle border */
+        }
+        .activity-image {
+            width: 48px; /* Reduced from 64px */
+            height: 48px; /* Reduced from 64px */
+            border-radius: 4px;
+            object-fit: cover;
+            flex-shrink: 0; /* Prevent image from shrinking */
+        }
+        .activity-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px; /* Reduced from 4px */
+            width: calc(100% - 56px); /* Adjusted for new image size */
+            flex: none; /* Prevent flex growing/shrinking */
+            position: relative; /* Add this for absolute positioning of progress bar */
+            justify-content: center; /* Center the text content vertically */
+            min-height: 48px; /* Match new image height */
+            padding-bottom: 0;
+        }
+
+        /* Add Spotify-specific styles */
+        .spotify-card {
+            cursor: pointer;
+        }
+
+        .spotify-card .activity-info {
+            padding-bottom: 0;
+        }
+
+        .spotify-card .progress-bar {
+            top: calc(100% + 12px); /* More space after content for Spotify */
+            margin-bottom: 10px;
+        }
+
+        .activity-info strong,
+        .activity-info span {
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            padding-right: 20px; /* Space for gradient */
+        }
+        .activity-info strong::after,
+        .activity-info span::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 40px;
+            background: linear-gradient(to right, transparent, #40444b);
+        }
+        .progress-bar {
+            width: calc(100% + 76px); /* Full width including image width and gap */
+            height: 4px;
+            background-color: #4f545c;
+            border-radius: 2px;
+            position: absolute;
+            top: calc(100% + 4px);
+            left: -76px; /* Pull back by image width + gap */
+        }
+        .progress-bar-fill {
+            position: absolute;
+            height: 100%;
+            background-color: #1db954;
+            border-radius: 2px;
+            transition: width 1s linear;
+        }
+        .user-profile {
+            position: relative;
+            margin-bottom: 15px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .display-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 1px;
+        }
+        .username {
+            font-size: 0.9em;
+            font-weight: 400;
+            color: #797979;
+            margin-bottom: 2.5px;
+        }
+        .activity-info strong {
+            font-size: 0.9em;
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            padding-right: 20px;
+        }
+        .activity-info span {
+            font-size: 0.75em;
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            padding-right: 20px;
+        }
+        .activity-label {
+            font-size: 0.8em;
+            color: #b9bbbe;
+            margin-bottom: -3px;
+            margin-top: 10px;
+        }
+        .separator {
+            background-color: #2a2c30;
+            height: 35px; /* Match activity card height */
+            width: 300px; /* Match activity card width */
+            border-radius: 20px;
+            margin: 10px 0;
+            padding: 8px 16px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .social-button {
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .social-button:hover {
+            opacity: 0.7;
+        }
+        
+        .social-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(15px); /* Reduced distance */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: slideUpFade 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* Smoother easing */
+            opacity: 0;
+        }
+
+        .delay-1 { animation-delay: 0.15s; }
+        .delay-2 { animation-delay: 0.25s; }
+        .delay-3 { animation-delay: 0.35s; }
+        .delay-4 { animation-delay: 0.45s; }
+
+        .preloader {
+            position: fixed;
+            inset: 0;
+            background: #36393f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother transition */
+        }
+        .preloader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .preloader-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #2f3136;
+            border-top-color: #5865f2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .content-hidden {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="preloader">
+        <div class="preloader-spinner"></div>
+    </div>
+    <div id="status-container" class="content-hidden">
+        <div id="user-profile" class="animate-in"></div>
+        <div id="status" class="animate-in delay-1"></div>
+        <div class="separator animate-in delay-2">
+            <button class="social-button">
+                <img src="tiktok.png" alt="TikTok">
+            </button>
+            <button class="social-button">
+                <img src="youtube.png" alt="YouTube">
+            </button>
+            <button class="social-button">
+                <img src="twitch.png" alt="Twitch">
+            </button>
+        </div>
+        <div class="activity-label animate-in delay-3">Activity:</div>
+        <div id="activities-container" class="animate-in delay-4"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
