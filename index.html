@@ -15,6 +15,8 @@
             margin: 0;
             background-color: #36393f;
             color: #ffffff;
+            padding: 20px;
+            box-sizing: border-box;
         }
         #status-container {
             background-color: #2f3136;
@@ -22,6 +24,9 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
             border: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: calc(300px); /* separator max-width + padding */
+            width: 100%;
+            box-sizing: border-box;
         }
         .status-wrapper {
             display: inline-flex;
@@ -81,7 +86,9 @@
             align-items: center;
             gap: 8px; /* Reduced from 12px */
             height: 63px; /* Reduced from 88px */
-            width: 300px; /* Fixed width */
+            width: 100%; /* Changed from fixed width */
+            max-width: 300px; /* Added max-width instead */
+            margin: 0 auto; /* Center the card */
             overflow: hidden;
             box-sizing: border-box;
             position: relative; /* Add this for progress bar positioning */
@@ -206,9 +213,10 @@
         .separator {
             background-color: #2a2c30;
             height: 35px; /* Match activity card height */
-            width: 300px; /* Match activity card width */
+            width: 100%; /* Changed from fixed width */
+            max-width: 300px; /* Added max-width instead */
             border-radius: 20px;
-            margin: 10px 0;
+            margin: 10px auto; /* Center the separator */
             padding: 8px 16px;
             box-sizing: border-box;
             display: flex;
