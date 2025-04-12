@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>monako</title>
+    <title>Discord Status</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        html {
+            min-height: 100vh;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             background-color: #36393f;
             color: #ffffff;
@@ -30,6 +34,7 @@
             box-sizing: border-box;
             max-height: calc(100vh - 40px);
             overflow: auto;
+            transform: translateY(-2vh); /* Slight upward adjustment for visual balance */
         }
         .status-wrapper {
             display: inline-flex;
@@ -310,13 +315,13 @@
         <div id="user-profile" class="animate-in"></div>
         <div id="status" class="animate-in delay-1"></div>
         <div class="separator animate-in delay-2">
-            <button class="social-button">
+            <button class="social-button" onclick="window.open('https://www.tiktok.com/@monako.dev', '_blank')">
                 <img src="tiktok.png" alt="TikTok">
             </button>
-            <button class="social-button">
+            <button class="social-button" onclick="window.open('https://www.youtube.com/@frmonako', '_blank')">
                 <img src="youtube.png" alt="YouTube">
             </button>
-            <button class="social-button">
+            <button class="social-button" onclick="window.open('https://www.twitch.tv/frmonako', '_blank')">
                 <img src="twitch.png" alt="Twitch">
             </button>
         </div>
